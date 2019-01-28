@@ -1,7 +1,7 @@
 {
-  "name": "reactnd-template",
+  "name": "reactnd-exercise-2-all-together",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a  Chat app UI",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
