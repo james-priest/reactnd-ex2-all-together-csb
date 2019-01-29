@@ -6,7 +6,7 @@ class MessageInput extends Component {
     msg: ""
   };
   isDisabled = () => {
-    if (this.state.value === "") {
+    if (this.state.msg === "") {
       return true;
     }
     return false;
