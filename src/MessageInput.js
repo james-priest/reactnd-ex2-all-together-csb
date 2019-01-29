@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class MessageInput extends Component {
   state = {
@@ -41,5 +42,9 @@ class MessageInput extends Component {
     );
   }
 }
+
+MessageInput.propTypes = {
+  onPostMessage: PropTypes.func.isRequired
+};
 
 export default MessageInput;
