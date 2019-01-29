@@ -10,8 +10,11 @@ class App extends Component {
       { username: "John", text: "Hi, Amy! Good, you?" }
     ]
   };
-  isDisabled = () => {
-    return false;
+  postMessage = msg => {
+    console.log(msg);
+    this.setState(prevState => ({
+      messages: [...prevState.messages, msg]
+    }));
   };
   render() {
     const { messages } = this.state;
@@ -24,81 +27,16 @@ class App extends Component {
         </header>
         <main className="App-main">
           <div className="container">
-            {/*<div className="chat-window">
-              <h2>Super Awesome Chat</h2>
-              <div className="name sender">{this.users[0].username}</div>
-
-              <ul className="message-list">
-                {messages.map((message, index) => (
-                  <li
-                    key={index}
-                    className={
-                      message.username === this.users[0].username
-                        ? "message sender"
-                        : "message recipient"
-                    }
-                  >
-                    <p>{`${message.username}: ${message.text}`}</p>
-                  </li>
-                ))}
-              </ul>
-
-              <div>
-                <form className="input-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter your message..."
-                  />
-                  <div className="input-group-append">
-                    <button
-                      className="btn submit-button"
-                      disabled={this.isDisabled()}
-                    >
-                      SEND
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>*/}
-            {/*<div className="chat-window">
-              <h2>Super Awesome Chat</h2>
-              <div className="name sender">{this.users[1].username}</div>
-              <ul className="message-list">
-                {messages.map((message, index) => (
-                  <li
-                    key={index}
-                    className={
-                      message.username === this.users[1].username
-                        ? "message sender"
-                        : "message recipient"
-                    }
-                  >
-                    <p>{`${message.username}: ${message.text}`}</p>
-                  </li>
-                ))}
-              </ul>
-
-              <div>
-                <form className="input-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter your message..."
-                  />
-                  <div className="input-group-append">
-                    <button
-                      className="btn submit-button"
-                      disabled={this.isDisabled()}
-                    >
-                      SEND
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>*/}
-            <ChatWindow username={this.users[0].username} messages={messages} />
-            <ChatWindow username={this.users[1].username} messages={messages} />
+            <ChatWindow
+              username={this.users[0].username}
+              messages={messages}
+              onPostMessage={this.postMessage}
+            />
+            <ChatWindow
+              username={this.users[1].username}
+              messages={messages}
+              onPostMessage={this.postMessage}
+            />
           </div>
         </main>
       </div>
@@ -107,8 +45,14 @@ class App extends Component {
 }
 
 class ChatWindow extends Component {
-  isDisabled = () => {
-    return false;
+  composeMessage = msg => {
+    const { username } = this.props;
+    const text = msg;
+    const msgObect = {
+      username,
+      text
+    };
+    this.props.onPostMessage(msgObect);
   };
   render() {
     const { username, messages } = this.props;
@@ -116,39 +60,70 @@ class ChatWindow extends Component {
       <div className="chat-window">
         <h2>Super Awesome Chat</h2>
         <div className="name sender">{username}</div>
+        <ChatHistory messages={messages} username={username} />
+        <MessageInput onPostMessage={this.composeMessage} />
+      </div>
+    );
+  }
+}
 
-        <ul className="message-list">
-          {messages.map((message, index) => (
-            <li
-              key={index}
-              className={
-                message.username === username
-                  ? "message sender"
-                  : "message recipient"
-              }
-            >
-              <p>{`${message.username}: ${message.text}`}</p>
-            </li>
-          ))}
-        </ul>
+function ChatHistory(props) {
+  const { messages, username } = props;
+  return (
+    <ul className="message-list">
+      {messages.map((message, index) => (
+        <li
+          key={index}
+          className={
+            message.username === username
+              ? "message sender"
+              : "message recipient"
+          }
+        >
+          <p>{`${message.username}: ${message.text}`}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
-        <div>
-          <form className="input-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter your message..."
-            />
-            <div className="input-group-append">
-              <button
-                className="btn submit-button"
-                disabled={this.isDisabled()}
-              >
-                SEND
-              </button>
-            </div>
-          </form>
-        </div>
+class MessageInput extends Component {
+  state = {
+    msg: ""
+  };
+  isDisabled = () => {
+    if (this.state.value === "") {
+      return true;
+    }
+    return false;
+  };
+  handleChange = e => {
+    this.setState({
+      msg: e.target.value
+    });
+  };
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.onPostMessage(this.state.msg);
+  };
+  render() {
+    const { msg } = this.state;
+    return (
+      <div>
+        <form className="input-group" onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter your message..."
+            value={msg}
+            onChange={this.handleChange}
+          />
+          <div className="input-group-append">
+            <button className="btn submit-button" disabled={this.isDisabled()}>
+              SEND
+            </button>
+          </div>
+        </form>
       </div>
     );
   }
