@@ -6,13 +6,13 @@ class App extends Component {
   users = [{ username: "Amy" }, { username: "John" }];
   state = {
     messages: [
-      { username: "Amy", text: "hi, John!" },
-      { username: "Amy", text: "how are you?" },
-      { username: "John", text: "hi, Amy! good, you?" },
-      { username: "Amy", text: "do u like me for real?" },
-      { username: "John", text: "I love u for real😘" },
-      { username: "Amy", text: "oh John 😍😍😍" },
-      { username: "John", text: "oh Amy 🤗🤗🤗" }
+      // { username: "Amy", text: "hi, John!" }
+      // { username: "Amy", text: "how are you?" },
+      // { username: "John", text: "hi, Amy! good, you?" }
+      // { username: "Amy", text: "do u like me for real?" },
+      // { username: "John", text: "I love u for real😘" },
+      // { username: "Amy", text: "oh John 😍😍😍" },
+      // { username: "John", text: "oh Amy 🤗🤗🤗" }
     ]
   };
   postMessage = msg => {
